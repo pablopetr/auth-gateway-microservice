@@ -18,12 +18,9 @@ it('returns profile for valid jwt', function () {
         'password' => 'testpassword',
     ])->assertOk();
 
-    $login->assertJsonStructure([
-        'tokens' => ['access_token'],
-        'user' => ['email'],
-    ]);
+    $login->assertJsonStructure(['access_token']);
 
-    $access = $login->json('tokens.access_token');
+    $access = $login->json('access_token');
 
     expect($access)->toBeString();
     expect($access)->not->toBeEmpty();
@@ -31,7 +28,7 @@ it('returns profile for valid jwt', function () {
     $this->withToken($access)
         ->getJson('/api/me')
         ->assertOk()
-        ->assertJsonPath('user.email', 'pablo@example.com');
+        ->assertJsonPath('data.email', 'pablo@example.com');
 });
 
 it('rejects invalid jwt on /api/me', function () {

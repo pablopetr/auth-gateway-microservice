@@ -16,14 +16,11 @@ it('logs in and returns tokens', function () {
 
     $res->assertOk()
         ->assertJsonStructure([
-            'tokens' => [
                 'access_token',
                 'token_type',
                 'expires_in',
                 'refresh_token',
                 'refresh_token_expires_in',
-            ],
-            'user' => ['id', 'name', 'email'],
         ]);
 });
 

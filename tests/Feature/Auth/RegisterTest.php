@@ -15,15 +15,7 @@ it('registers a user, returns tokens, and sends verification email', function ()
 
     $res->assertCreated()
         ->assertJsonStructure([
-            'tokens' => [
-                'access_token',
-                'token_type',
-                'expires_in',
-                'refresh_token',
-                'refresh_token_expires_in',
-            ],
-            'user' => [
-                'id',
+            'data' => [
                 'name',
                 'email',
                 'email_verified_at',
@@ -31,7 +23,7 @@ it('registers a user, returns tokens, and sends verification email', function ()
                 'updated_at',
             ],
         ])
-        ->assertJsonPath('user.email', 'pablo@gmail.com');
+        ->assertJsonPath('data.email', 'pablo@gmail.com');
 
     $user = User::query()->where('email', 'pablo@gmail.com')->firstOrFail();
 

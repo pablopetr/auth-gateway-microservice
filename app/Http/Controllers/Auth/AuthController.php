@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\DTO\Auth\LoginDTO;
-use App\DTO\Auth\RegisterDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -18,17 +16,17 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request, AuthService $auth): JsonResponse
     {
-        $dto = RegisterDTO::fromArray($request->validated());
+        $data = $request->validated();
 
         $auth->register(
-            name: $dto->name,
-            email: $dto->email,
-            password: $dto->password,
+            name: $data['name'],
+            email: $data['email'],
+            password: $data['password'],
             ip: $request->ip(),
             ua: $request->userAgent(),
         );
 
-        $user = User::query()->where('email', $dto->email)->firstOrFail();
+        $user = User::query()->where('email', $request->email)->firstOrFail();
 
         return (new UserResource($user))
             ->response()
@@ -37,8 +35,9 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request, AuthService $auth): JsonResponse
     {
-        $dto = LoginDTO::fromArray($request->validated());
-        $authTokensDTO = $auth->login($dto->email, $dto->password, $request->ip(), $request->userAgent());
+        $data = $request->validated();
+
+        $authTokensDTO = $auth->login($data['email'], $data['password'], $request->ip(), $request->userAgent());
 
         return $authTokensDTO->toResponse();
     }

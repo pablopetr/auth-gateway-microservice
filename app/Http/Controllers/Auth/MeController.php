@@ -13,7 +13,6 @@ class MeController extends Controller
     public function __invoke(Request $request): JsonResponse
     {
         return (new UserResource($request->user()))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
+            ->response();
     }
 }

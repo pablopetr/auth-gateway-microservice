@@ -14,13 +14,13 @@ it('refresh rotates refresh token and invalidates the old one', function () {
         'password' => 'testpassword',
     ])->assertOk();
 
-    $oldRefresh = $login->json('tokens.refresh_token');
+    $oldRefresh = $login->json('refresh_token');
 
     $refresh = $this->postJson('/api/auth/refresh', [
         'refresh_token' => $oldRefresh,
     ])->assertOk();
 
-    $newRefresh = $refresh->json('tokens.refresh_token');
+    $newRefresh = $refresh->json('refresh_token');
 
     expect($newRefresh)->not->toBe($oldRefresh);
 
@@ -47,7 +47,7 @@ it('logout revokes refresh token (cannot refresh afterwards)', function () {
         'password' => 'testpassword',
     ])->assertOk();
 
-    $refreshToken = $login->json('tokens.refresh_token');
+    $refreshToken = $login->json('refresh_token');
 
     $this->postJson('/api/auth/logout', [
         'refresh_token' => $refreshToken,

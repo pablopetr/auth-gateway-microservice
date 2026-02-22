@@ -18,7 +18,7 @@ it('writes audit logs for register/login/refresh/logout', function () {
 
     expect(AuditLog::query()->where('event', 'auth.login.success')->exists())->toBeTrue();
 
-    $refreshToken = $login->json('tokens.refresh_token');
+    $refreshToken = $login->json('refresh_token');
 
     $this->postJson('/api/auth/refresh', [
         'refresh_token' => $refreshToken,
