@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\DTO\User\UserProfileDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class MeController extends Controller
 {
-    public function __invoke(Request $request): \Illuminate\Http\JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
-        return response()->json([
-            'user' => UserProfileDTO::fromUser($request->user())->toArray(),
-        ]);
+        return (new UserResource($request->user()))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 }
